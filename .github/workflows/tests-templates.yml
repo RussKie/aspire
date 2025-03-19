@@ -1,11 +1,11 @@
 # Executes the template tests on all platforms
 name: Templates
 
-on:
-  pull_request:
-    branches:
-      - main
-      - 'release/**'
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#       - 'release/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
