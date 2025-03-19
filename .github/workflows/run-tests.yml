@@ -247,25 +247,26 @@ jobs:
           CI: false
           DCP_DIAGNOSTICS_LOG_LEVEL: debug
           DCP_DIAGNOSTICS_LOG_FOLDER: ${{ github.workspace }}/testresults/dcp
+        shell: pwsh
         run: >
-          dotnet test
-              ${{ env.TEST_PROJECT_PATH }}
-              /p:ContinuousIntegrationBuild=true
-              /p:RunQuarantinedTests=${{ inputs.onlyQuarantine }}
-              -s eng/testing/.runsettings
-              -l "console;verbosity=minimal"
-              -l "trx;LogFilePrefix=${{ inputs.testShortName }}"
-              -l "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true"
-              --no-restore
-              --no-build
-              --blame
-              --blame-hang-timeout ${{ inputs.testHangTimeout }}
-              --blame-crash
-              --results-directory testresults
-              ${{ inputs.extraTestArgs }}
-              /bl:${{ github.workspace }}/artifacts/log/${{ env.TEST_ASSEMBLY_NAME }}-quarantined-tests.binlog
-              --
-              RunConfiguration.CollectSourceInformation=true
+          dotnet test `
+              ${{ env.TEST_PROJECT_PATH }} `
+              /p:ContinuousIntegrationBuild=true `
+              /p:RunQuarantinedTests=${{ inputs.onlyQuarantine }} `
+              -s eng/testing/.runsettings `
+              -l "console;verbosity=minimal" `
+              -l "trx;LogFilePrefix=${{ inputs.testShortName }}" `
+              -l "GitHubActions;summary.includePassedTests=true;summary.includeSkippedTests=true" `
+              --no-restore `
+              --no-build `
+              --blame `
+              --blame-hang-timeout ${{ inputs.testHangTimeout }} `
+              --blame-crash `
+              --results-directory testresults `
+              ${{ inputs.extraTestArgs }} `
+              /bl:${{ github.workspace }}/artifacts/log/${{ env.TEST_ASSEMBLY_NAME }}-quarantined-tests.binlog `
+              -- `
+              RunConfiguration.CollectSourceInformation=true `
               RunConfiguration.TestSessionTimeout=${{ inputs.testSessionTimeoutMs }}
 
       # Save the result of the previous steps - success or failure
