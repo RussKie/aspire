@@ -23,10 +23,12 @@
       <_TestProjectsToExclude Include="$(RepoRoot)tests\Aspire.Workload.Tests\**\*Tests.csproj" />
 
 
-      <_TestProjectsToInclude Include="$(RepoRoot)tests\Aspire.Hosting.Milvus.Tests\*Tests.csproj" />
+      <_TestProjectsToInclude Include="$(RepoRoot)tests\*.Messaging.*\*Tests.csproj" />
 
       <_TestProjects Include="@(_TestProjectsToInclude)"
                      Exclude="@(_TestProjectsToExclude)" />
+      <!-- <_TestProjects Include="$(RepoRoot)tests\**\*Tests.csproj"
+                     Exclude="@(_TestProjectsToExclude)" /> -->
     </ItemGroup>
 
     <!-- this returns an item list of [true, true, false...] with %(MSBuildSourceProjectFile) set -->
