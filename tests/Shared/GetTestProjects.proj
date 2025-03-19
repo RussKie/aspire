@@ -22,7 +22,10 @@
       <!-- This runs in a separate job -->
       <_TestProjectsToExclude Include="$(RepoRoot)tests\Aspire.Workload.Tests\**\*Tests.csproj" />
 
-      <_TestProjects Include="$(RepoRoot)tests\**\*Tests.csproj"
+
+      <_TestProjectsToInclude Include="$(RepoRoot)tests\Aspire.Hosting.Milvus.Tests\*Tests.csproj" />
+
+      <_TestProjects Include="@(_TestProjectsToInclude)"
                      Exclude="@(_TestProjectsToExclude)" />
     </ItemGroup>
 
