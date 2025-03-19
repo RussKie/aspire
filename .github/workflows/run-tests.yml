@@ -248,7 +248,7 @@ jobs:
           DCP_DIAGNOSTICS_LOG_LEVEL: debug
           DCP_DIAGNOSTICS_LOG_FOLDER: ${{ github.workspace }}/testresults/dcp
         run: >
-          ${{ env.DOTNET_SCRIPT }} test
+          dotnet test
               ${{ env.TEST_PROJECT_PATH }}
               /p:ContinuousIntegrationBuild=true
               /p:RunQuarantinedTests=${{ inputs.onlyQuarantine }}
