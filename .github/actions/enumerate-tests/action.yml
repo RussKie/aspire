@@ -1,16 +1,18 @@
 name: 'Enumerate test projects'
 description: 'Enumerate list of test projects'
+
 outputs:
   tests_matrix:
-    description: tests matrix
+    description: The matrix of tests to run
     value: ${{ steps.generate_test_matrix.outputs.tests_matrix }}
+
 runs:
   using: "composite"
   steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Set up .NET Core
+    - name: Set up .NET SDK
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: |
