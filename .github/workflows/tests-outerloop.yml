@@ -45,7 +45,11 @@ jobs:
 
       - name: Run quarantined tests
         run: |
-         ${{ env.BUILD_SCRIPT }} -projects ${{ github.workspace }}/tests/Shared/SolutionTests.proj -restore -build -test -c Release /p:IsGitHubActions=true /p:RunQuarantinedTests=true /bl:${{ github.workspace }}/artifacts/log/Release/test-quarantined.binlog
+          ${{ env.BUILD_SCRIPT }} -projects ${{ github.workspace }}/tests/Shared/SolutionTests.proj -restore -build -test -c Release /p:IsGitHubActions=true /p:RunQuarantinedTests=true /bl:${{ github.workspace }}/artifacts/log/Release/test-quarantined.binlog
+          if ($LASTEXITCODE -ne 0) {
+              Write-Host "::error::Build failed with exit code $LASTEXITCODE. Check errors above. "
+              exit $LASTEXITCODE
+          }
 
       - name: Keep only relevant test logs
         if: always()
@@ -87,7 +91,7 @@ jobs:
               }
           }
 
-      - name: Post Results
+      - name: Process logs and post results
         if: always()
         shell: pwsh
         run: |
@@ -144,11 +148,11 @@ jobs:
           }
 
           # Format the test results as a console-friendly table
-          $tableHeader = "{0,-10} {1,-150} {2,-20}" -f "Duration", "Test Name", "Result"
+          $tableHeader = "{0,-16} {1,-150} {2,-20}" -f "Duration", "Test Name", "Result"
           $tableSeparator = "-" * 185
-          $tableRows = $testResults | ForEach-Object { "{0,-10} {1,-150} {2,-20}" -f $_.Duration, $_.TestName, "$($_.OutcomeIcon) $($_.Outcome)" }
-          $table = "$tableHeader`n$tableSeparator`n" + ($tableRows -join "`n")
-          Write-Host "Test Results:`n`n$table"
+          $tableRows = $testResults | ForEach-Object { "{0,-16} {1,-150} {2,-20}" -f $_.Duration, $_.TestName, "$($_.OutcomeIcon) $($_.Outcome)" }
+          $table = "$tableHeader`n$tableSeparator`n" + ($tableRows -join "`n") + "`n$tableSeparator`n"
+          Write-Host "`nTest Results:`n`n$table"
 
           # Optionally, save the results to a file for further processing
           $outputPath = "${{ github.workspace }}/artifacts/log/Release/TestLogs/summary.log"
