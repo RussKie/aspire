@@ -48,6 +48,7 @@ jobs:
          ${{ env.BUILD_SCRIPT }} -projects ${{ github.workspace }}/tests/Shared/SolutionTests.proj -restore -build -test -c Release /p:IsGitHubActions=true /p:RunQuarantinedTests=true /bl:${{ github.workspace }}/artifacts/log/Release/test-quarantined.binlog
 
       - name: Keep only relevant test logs
+        if: always()
         shell: pwsh
         run: |
           # Define the directory to search for log files
@@ -85,6 +86,48 @@ jobs:
                   }
               }
           }
+
+      - name: SearchTrx
+        if: always()
+        shell: pwsh
+        run: |
+          $logDirectory = "${{ github.workspace }}/artifacts/log/**/TestLogs"
+          $trxFiles = Get-ChildItem -Path $logDirectory -Filter *.trx -Recurse
+
+          $testResults = @() # Initialize an array to store test results
+
+          foreach ($trxFile in $trxFiles) {
+              # Load the .trx file as XML
+              $xmlContent = [xml](Get-Content -Path $trxFile.FullName)
+
+              # Extract test results from the XML
+              foreach ($testResult in $xmlContent.TestRun.Results.UnitTestResult) {
+                  $testName = $testResult.testName
+                  $outcome = $testResult.outcome
+                  $duration = $testResult.duration
+
+                  # Add the test result to the array
+                  $testResults += [PSCustomObject]@{
+                      TestName  = $testName
+                      Outcome   = $outcome
+                      Duration  = $duration
+                  }
+              }
+          }
+
+          # Format the test results as a table
+          $tableHeader = "Test Name | Outcome | Duration"
+          $tableSeparator = "--- | --- | ---"
+          $tableRows = $testResults | ForEach-Object { "$($_.TestName) | $($_.Outcome) | $($_.Duration)" }
+          $table = "$tableHeader`n$tableSeparator`n$tableRows"
+
+          # Post the table as a GitHub annotation
+          Write-Host "::error::Test Results:`n$table"
+      
+          # Optionally, save the results to a JSON file for further processing
+          $outputPath = "${{ github.workspace }}/artifacts/log/Release/TestLogs/summary.json"
+          $testResults | ConvertTo-Json -Depth 10 | Set-Content -Path $outputPath
+          Write-Host "Test results saved to $outputPath"
 
       - name: Upload logs, and test results
         if: always()
