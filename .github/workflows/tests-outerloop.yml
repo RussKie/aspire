@@ -122,22 +122,23 @@ jobs:
           $skippedTests = ($testResults | Where-Object { $_.Outcome -eq "Skipped" }).Count
 
           # Add the summary to the annotation
-          $summary = "Total Tests: $totalTests, Passed: $passedTests, Failed: $failedTests, Skipped: $skippedTests"
+          $summary = "total: $totalTests, passed: $passedTests, failed: $failedTests, skipped: $skippedTests"
           if ($failedTests -gt 0) {
-              Write-Host "::error::Test Results Summary: $summary"
+              Write-Host "::error::Tests Summary: $summary"
           } else {
-              Write-Host "::notice::Test Results Summary: $summary"
+              Write-Host "::notice::Tests Summary: $summary"
           }
 
           # Format the test results as a console-friendly table
-          $tableHeader = "{0,-150} {1,-10} {2,-10}" -f "Test Name", "Outcome", "Duration"
+          $tableHeader = "{0,-150} {1,-10} {2,-10}" -f "Test Name", "Result", "Duration"
           $tableSeparator = "-" * 175
           $tableRows = $testResults | ForEach-Object { "{0,-150} {1,-10} {2,-10}" -f $_.TestName, $_.Outcome, $_.Duration }
           $table = "$tableHeader`n$tableSeparator`n" + ($tableRows -join "`n")
-      
+          Write-Host "Test Results:`n`n$table"
+
           # Optionally, save the results to a file for further processing
           $outputPath = "${{ github.workspace }}/artifacts/log/Release/TestLogs/summary.log"
-          $testResults | Out-File -FilePath $outputPath -Encoding utf8
+          $table | Out-File -FilePath $outputPath -Encoding utf8
           Write-Host "Test results saved to $outputPath"
 
       - name: Upload logs, and test results
