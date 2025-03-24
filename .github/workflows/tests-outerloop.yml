@@ -43,9 +43,22 @@ jobs:
         if: matrix.os.name == 'ubuntu-latest'
         run: ${{ env.DOTNET_SCRIPT }} dev-certs https --trust
 
-      - name: Run quarantined tests
+      - name: Run quarantined tests (Linux)
+        if: ${{ matrix.os.name == 'ubuntu-latest' }}
         run: |
           ${{ env.BUILD_SCRIPT }} -projects ${{ github.workspace }}/tests/Shared/SolutionTests.proj -restore -build -test -c Release /p:IsGitHubActions=true /p:RunQuarantinedTests=true /bl:${{ github.workspace }}/artifacts/log/Release/test-quarantined.binlog
+
+      - name: Run quarantined tests (Windows)
+        if: ${{ matrix.os.name == 'windows-latest' }}
+        shell: pwsh
+        run: |
+          Write-Host "$LASTEXITCODE code"
+          ${{ env.BUILD_SCRIPT }} -projects ${{ github.workspace }}/tests/Shared/SolutionTests.proj -restore -build -test -c Release /p:IsGitHubActions=true /p:RunQuarantinedTests=true /bl:${{ github.workspace }}/artifacts/log/Release/test-quarantined.binlog
+          Write-Host "$LASTEXITCODE code"
+          if ($LASTEXITCODE -ne 0) {
+              Write-Host "::error::Build failed with exit code $LASTEXITCODE. Check errors above. "
+              exit $LASTEXITCODE
+          }
 
       - name: Keep only relevant test logs
         if: always()
