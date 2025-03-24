@@ -312,7 +312,6 @@ public class DistributedApplicationTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task AllocatedPortsAssignedAfterHookRuns()
     {
@@ -346,7 +345,6 @@ public class DistributedApplicationTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task TestServicesWithMultipleReplicas()
     {
@@ -404,7 +402,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task VerifyContainerArgs()
     {
@@ -490,7 +487,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task VerifyContainerStopStartWorks()
     {
@@ -544,7 +540,6 @@ public class DistributedApplicationTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task VerifyExecutableStopStartWorks()
     {
@@ -580,7 +575,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task SpecifyingEnvPortInEndpointFlowsToEnv()
     {
@@ -638,7 +632,6 @@ public class DistributedApplicationTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task StartAsync_DashboardAuthConfig_PassedToDashboardProcess()
     {
@@ -680,7 +673,6 @@ public class DistributedApplicationTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task StartAsync_UnsecuredAllowAnonymous_PassedToDashboardProcess()
     {
@@ -718,7 +710,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task VerifyDockerWithEntrypointWorks()
     {
@@ -748,7 +739,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task VerifyDockerWithBindMountWorksWithAbsolutePaths()
     {
@@ -780,7 +770,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task VerifyDockerWithBindMountWorksWithRelativePaths()
     {
@@ -812,7 +801,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task VerifyDockerWithVolumeWorksWithName()
     {
@@ -843,7 +831,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task KubernetesHasResourceNameForContainersAndExes()
     {
@@ -902,7 +889,6 @@ public class DistributedApplicationTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task ReplicasAndProxylessEndpointThrows()
     {
@@ -922,7 +908,6 @@ public class DistributedApplicationTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task ProxylessEndpointWithoutPortThrows()
     {
@@ -943,7 +928,6 @@ public class DistributedApplicationTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task ProxylessEndpointWorks()
     {
@@ -980,7 +964,6 @@ public class DistributedApplicationTests
     }
 
     [Fact(Skip = "https://github.com/dotnet/aspire/issues/4599")]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4599", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4599")]
     public async Task ProxylessAndProxiedEndpointBothWorkOnSameResource()
     {
@@ -1049,7 +1032,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task ProxylessContainerCanBeReferenced()
     {
@@ -1156,7 +1138,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task ProxylessContainerWithoutPortThrows()
     {
@@ -1176,7 +1157,6 @@ public class DistributedApplicationTests
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4651", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4651")]
     public async Task AfterResourcesCreatedLifecycleHookWorks()
     {

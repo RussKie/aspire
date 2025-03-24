@@ -19,7 +19,6 @@ public class SlimTestProgramTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/7923", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnGithubActions), nameof(PlatformDetection.IsWindows))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/7923")]
     public async Task TestProjectStartsAndStopsCleanly()
     {
@@ -45,7 +44,6 @@ public class SlimTestProgramTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/7923", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnGithubActions), nameof(PlatformDetection.IsWindows))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/7923")]
     public async Task TestPortOnEndpointAnnotationAndAllocatedEndpointAnnotationMatch()
     {
@@ -65,7 +63,6 @@ public class SlimTestProgramTests
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/7923", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnGithubActions), nameof(PlatformDetection.IsWindows))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/7923")]
     public async Task TestPortOnEndpointAnnotationAndAllocatedEndpointAnnotationMatchForReplicatedServices()
     {

@@ -46,7 +46,6 @@ public class TestingFactoryTests(DistributedApplicationFixture<Projects.TestingA
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4650", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4650")]
     public async Task HttpClientGetTest()
     {
@@ -70,7 +69,6 @@ public class TestingFactoryTests(DistributedApplicationFixture<Projects.TestingA
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4650")]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4650")]
     public async Task SelectsFirstLaunchProfile()
     {

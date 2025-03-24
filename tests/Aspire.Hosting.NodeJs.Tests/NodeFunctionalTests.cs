@@ -18,7 +18,6 @@ public class NodeFunctionalTests : IClassFixture<NodeAppFixture>
 
     [Fact]
     [RequiresTools(["node"])]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4508", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4508")]
     public async Task VerifyNodeAppWorks()
     {
@@ -31,7 +30,6 @@ public class NodeFunctionalTests : IClassFixture<NodeAppFixture>
 
     [Fact]
     [RequiresTools(["npm"])]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/4508", typeof(PlatformDetection), nameof(PlatformDetection.IsRunningOnCI))]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/4508")]
     public async Task VerifyNpmAppWorks()
     {

@@ -55,6 +55,7 @@ jobs:
 
           # Define the text to search for in the log files
           $searchText = "No test matches the given testcase filter"
+          $resultsFilePattern = "Results File: (.+)"
 
           # Get all .log files in the specified directory and its subdirectories
           $logFiles = Get-ChildItem -Path $logDirectory -Filter *.log -Recurse
@@ -69,6 +70,20 @@ jobs:
                   Remove-Item -Path $logFile.FullName -Force
                   Write-Host "Removed file: $($logFile.FullName)"
               }
+              else {
+                  # Extract paths from lines containing "Results File: <path>"
+                  foreach ($line in $content) {
+                      if ($line -match $resultsFilePattern) {
+                          $resultsFilePath = $matches[1]
+                          Write-Host "Found results file: $resultsFilePath"
+
+                          # Copy the results file to the TestLogs folder
+                          $destinationPath = (Split-Path -Path $logFile.FullName -Parent)
+                          Copy-Item -Path $resultsFilePath -Destination $destinationPath -Force
+                          Write-Host "Copied $resultsFilePath to $destinationPath"
+                      }
+                  }
+              }
           }
 
       - name: Upload logs, and test results
@@ -77,6 +92,6 @@ jobs:
         with:
           name: logs-${{ matrix.os.name }}
           path: |
-            ${{ github.workspace }}/artifacts/log/**/*.binlog
-            ${{ github.workspace }}/artifacts/log/**/TestLogs/**
-            ${{ github.workspace }}/TestResults/**
+            ${{ github.workspace }}/artifacts/log/*/*.binlog
+            ${{ github.workspace }}/artifacts/log/*/TestLogs/**
+          retention-days: 5

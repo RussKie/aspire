@@ -32,7 +32,6 @@ public class AppHostTests
 
     [Theory]
     [MemberData(nameof(TestEndpoints))]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/6866")]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/6866")]
     public async Task TestEndpointsReturnOk(TestEndpoints testEndpoints)
     {

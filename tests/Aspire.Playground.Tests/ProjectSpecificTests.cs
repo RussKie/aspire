@@ -31,7 +31,6 @@ public class ProjectSpecificTests(ITestOutputHelper _testOutput)
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/6867")]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/6867")]
     public async Task KafkaTest()
     {

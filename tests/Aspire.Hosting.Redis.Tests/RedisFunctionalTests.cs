@@ -25,7 +25,6 @@ public class RedisFunctionalTests(ITestOutputHelper testOutputHelper)
 {
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/7177")]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/7177")]
     public async Task VerifyWaitForOnRedisBlocksDependentResources()
     {
@@ -125,7 +124,6 @@ public class RedisFunctionalTests(ITestOutputHelper testOutputHelper)
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/7291")]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/7291")]
     public async Task VerifyDatabasesAreNotDuplicatedForPersistentRedisInsightContainer()
     {
@@ -231,7 +229,6 @@ public class RedisFunctionalTests(ITestOutputHelper testOutputHelper)
 
     [Fact]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/6099")]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/6099")]
     public async Task VerifyWithRedisInsightImportDatabases()
     {
@@ -540,7 +537,6 @@ public class RedisFunctionalTests(ITestOutputHelper testOutputHelper)
     [InlineData(false)]
     [InlineData(true)]
     [RequiresDocker]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/7176")]
     [QuarantinedTest("https://github.com/dotnet/aspire/issues/7176")]
     public async Task RedisInsightWithDataShouldPersistStateBetweenUsages(bool useVolume)
     {
