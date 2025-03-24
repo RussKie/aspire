@@ -115,18 +115,29 @@ jobs:
               }
           }
 
-          # Format the test results as a table
-          $tableHeader = "Test Name | Outcome | Duration"
-          $tableSeparator = "--- | --- | ---"
-          $tableRows = $testResults | ForEach-Object { "$($_.TestName) | $($_.Outcome) | $($_.Duration)" }
-          $table = "$tableHeader`n$tableSeparator`n$tableRows"
+          # Calculate summary statistics
+          $totalTests = $testResults.Count
+          $passedTests = ($testResults | Where-Object { $_.Outcome -eq "Passed" }).Count
+          $failedTests = ($testResults | Where-Object { $_.Outcome -eq "Failed" }).Count
+          $skippedTests = ($testResults | Where-Object { $_.Outcome -eq "Skipped" }).Count
 
-          # Post the table as a GitHub annotation
-          Write-Host "::error::Test Results:`n$table"
+          # Add the summary to the annotation
+          $summary = "Total Tests: $totalTests, Passed: $passedTests, Failed: $failedTests, Skipped: $skippedTests"
+          if ($failedTests -gt 0) {
+              Write-Host "::error::Test Results Summary: $summary"
+          } else {
+              Write-Host "::notice::Test Results Summary: $summary"
+          }
+
+          # Format the test results as a console-friendly table
+          $tableHeader = "{0,-150} {1,-10} {2,-10}" -f "Test Name", "Outcome", "Duration"
+          $tableSeparator = "-" * 175
+          $tableRows = $testResults | ForEach-Object { "{0,-150} {1,-10} {2,-10}" -f $_.TestName, $_.Outcome, $_.Duration }
+          $table = "$tableHeader`n$tableSeparator`n" + ($tableRows -join "`n")
       
-          # Optionally, save the results to a JSON file for further processing
-          $outputPath = "${{ github.workspace }}/artifacts/log/Release/TestLogs/summary.json"
-          $testResults | ConvertTo-Json -Depth 10 | Set-Content -Path $outputPath
+          # Optionally, save the results to a file for further processing
+          $outputPath = "${{ github.workspace }}/artifacts/log/Release/TestLogs/summary.log"
+          $testResults | Out-File -FilePath $outputPath -Encoding utf8
           Write-Host "Test results saved to $outputPath"
 
       - name: Upload logs, and test results
