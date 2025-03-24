@@ -110,15 +110,18 @@ jobs:
                   switch ($outcome) {
                       "Passed" { $emoji = "✔️" }
                       "Failed" { $emoji = "❌" }
-                      default { $emoji = "❓" }
+                      default { $emoji = "❔" }
                   }
+
+                  # Normalize the duration to a consistent format (hh:mm:ss.fff)
+                  $normalizedDuration = [TimeSpan]::Parse($duration).ToString("mm\:ss\.fff")
 
                   # Add the test result to the array
                   $testResults += [PSCustomObject]@{
                       TestName    = $testName
                       Outcome     = $outcome
                       OutcomeIcon = $emoji
-                      Duration    = $duration
+                      Duration    = $normalizedDuration
                   }
               }
           }
@@ -141,9 +144,9 @@ jobs:
           }
 
           # Format the test results as a console-friendly table
-          $tableHeader = "{0,-150} {1,-20} {2,-10}" -f "Test Name", "Result", "Duration"
+          $tableHeader = "{0,-10} {1,-150} {2,-20}" -f "Duration", "Test Name", "Result"
           $tableSeparator = "-" * 185
-          $tableRows = $testResults | ForEach-Object { "{0,-150} {1,-20} {2,-10}" -f $_.TestName, "$($_.OutcomeIcon) $($_.Outcome)", $_.Duration }
+          $tableRows = $testResults | ForEach-Object { "{0,-10} {1,-150} {2,-20}" -f $_.Duration, $_.TestName, "$($_.OutcomeIcon) $($_.Outcome)" }
           $table = "$tableHeader`n$tableSeparator`n" + ($tableRows -join "`n")
           Write-Host "Test Results:`n`n$table"
 
