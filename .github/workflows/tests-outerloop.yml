@@ -87,7 +87,7 @@ jobs:
               }
           }
 
-      - name: SearchTrx
+      - name: Post Results
         if: always()
         shell: pwsh
         run: |
@@ -106,20 +106,31 @@ jobs:
                   $outcome = $testResult.outcome
                   $duration = $testResult.duration
 
+                  # Map outcome to emoji
+                  switch ($outcome) {
+                      "Passed" { $emoji = "✔️" }
+                      "Failed" { $emoji = "❌" }
+                      default { $emoji = "❓" }
+                  }
+
                   # Add the test result to the array
                   $testResults += [PSCustomObject]@{
-                      TestName  = $testName
-                      Outcome   = $outcome
-                      Duration  = $duration
+                      TestName    = $testName
+                      Outcome     = $outcome
+                      OutcomeIcon = $emoji
+                      Duration    = $duration
                   }
               }
           }
+
+          # Sort the test results by test name
+          $testResults = $testResults | Sort-Object -Property TestName
 
           # Calculate summary statistics
           $totalTests = $testResults.Count
           $passedTests = ($testResults | Where-Object { $_.Outcome -eq "Passed" }).Count
           $failedTests = ($testResults | Where-Object { $_.Outcome -eq "Failed" }).Count
-          $skippedTests = ($testResults | Where-Object { $_.Outcome -eq "Skipped" }).Count
+          $skippedTests = ($testResults | Where-Object { $_.Outcome -eq "NotExecuted" }).Count
 
           # Add the summary to the annotation
           $summary = "total: $totalTests, passed: $passedTests, failed: $failedTests, skipped: $skippedTests"
@@ -130,9 +141,9 @@ jobs:
           }
 
           # Format the test results as a console-friendly table
-          $tableHeader = "{0,-150} {1,-10} {2,-10}" -f "Test Name", "Result", "Duration"
-          $tableSeparator = "-" * 175
-          $tableRows = $testResults | ForEach-Object { "{0,-150} {1,-10} {2,-10}" -f $_.TestName, $_.Outcome, $_.Duration }
+          $tableHeader = "{0,-150} {1,-20} {2,-10}" -f "Test Name", "Result", "Duration"
+          $tableSeparator = "-" * 185
+          $tableRows = $testResults | ForEach-Object { "{0,-150} {1,-20} {2,-10}" -f $_.TestName, "$($_.OutcomeIcon) $($_.Outcome)", $_.Duration }
           $table = "$tableHeader`n$tableSeparator`n" + ($tableRows -join "`n")
           Write-Host "Test Results:`n`n$table"
 
