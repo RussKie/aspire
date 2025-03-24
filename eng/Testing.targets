@@ -10,6 +10,6 @@
     <SkipTests Condition=" '$(IsHelix)' == 'true' and '$(RunTestsOnHelix)' == 'true' ">false</SkipTests>
 
     <!-- Otherwise, run tests on AzDO CI agents -->
-    <SkipTests Condition=" '$(RunTestsOnGithubActions)' != 'true' and '$(RunTestsOnHelix)' != 'true' ">true</SkipTests>
+    <SkipTests Condition=" '$(RunTestsOnGithubActions)' != 'true' and '$(RunTestsOnHelix)' != 'true' ">false</SkipTests>
   </PropertyGroup>
 </Project>
