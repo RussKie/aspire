@@ -43,22 +43,9 @@ jobs:
         if: matrix.os.name == 'ubuntu-latest'
         run: ${{ env.DOTNET_SCRIPT }} dev-certs https --trust
 
-      - name: Run quarantined tests (Linux)
-        if: ${{ matrix.os.name == 'ubuntu-latest' }}
+      - name: Run quarantined tests
         run: |
           ${{ env.BUILD_SCRIPT }} -projects ${{ github.workspace }}/tests/Shared/SolutionTests.proj -restore -build -test -c Release /p:IsGitHubActions=true /p:RunQuarantinedTests=true /bl:${{ github.workspace }}/artifacts/log/Release/test-quarantined.binlog
-
-      - name: Run quarantined tests (Windows)
-        if: ${{ matrix.os.name == 'windows-latest' }}
-        shell: pwsh
-        run: |
-          Write-Host "$LASTEXITCODE code"
-          ${{ env.BUILD_SCRIPT }} -projects ${{ github.workspace }}/tests/Shared/SolutionTests.proj -restore -build -test -c Release /p:IsGitHubActions=true /p:RunQuarantinedTests=true /bl:${{ github.workspace }}/artifacts/log/Release/test-quarantined.binlog
-          Write-Host "$LASTEXITCODE code"
-          if ($LASTEXITCODE -ne 0) {
-              Write-Host "::error::Build failed with exit code $LASTEXITCODE. Check errors above. "
-              exit $LASTEXITCODE
-          }
 
       - name: Keep only relevant test logs
         if: always()
@@ -167,6 +154,13 @@ jobs:
           $outputPath = "${{ github.workspace }}/artifacts/log/Release/TestLogs/summary.log"
           $table | Out-File -FilePath $outputPath -Encoding utf8
           Write-Host "Test results saved to $outputPath"
+
+          # Windows-specific: Check for failed tests and set the exit code accordingly
+          # This is a workaround for the issue with the `exit` command in PowerShell
+          if ($failedTests -gt 0) {
+              Write-Host "::error::Build failed. Check errors above."
+              exit 1
+          }
 
       - name: Upload logs, and test results
         if: always()
