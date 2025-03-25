@@ -1,0 +1,71 @@
+# Executes all the tests on all the platforms
+name: Tests
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # Duplicated jobs so their dependencies are not blocked on both the
+  # setup jobs
+
+  generate_tests_matrix:
+    name: Generate test runsheet
+    runs-on: windows-latest
+    outputs:
+      integrations_tests_matrix: ${{ steps.generate_tests_matrix.outputs.integrations_tests_matrix }}
+      #templates_tests_matrix: ${{ steps.generate_tests_matrix.outputs.templates_tests_matrix }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Install toolsets
+        shell: pwsh
+        run: |
+          mkdir ./artifacts/tmp -force | Out-Null
+          '<Project />' | Out-File -FilePath ./artifacts/tmp/install-toolset.proj -Encoding utf8
+          ./build.cmd -restore -projects ./artifacts/tmp/install-toolset.proj
+
+      - name: Generate test runsheet
+        id: generate_tests_matrix
+        shell: pwsh
+        run: |
+          ./build.cmd -test /p:TestRunnerName=TestRunsheetBuilder /bl -c Release
+
+  run_tests:
+    name: Run tests
+    needs: generate_tests_matrix
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest] # Add OS dimension
+        test: ${{ fromJson(needs.generate_tests_matrix.outputs.integrations_tests_matrix) }}
+
+    runs-on: ${{ matrix.os }} # Use the OS from the matrix
+
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Run tests (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: pwsh
+        run: |
+          ${{ matrix.test.runnerWindows }} ${{ matrix.test.command }}
+
+      - name: Run tests (Linux)
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        shell: pwsh
+        run: |
+          ${{ matrix.test.runnerLinux }} ${{ matrix.test.command }}
+
+      - name: Upload logs, and test results
+        if: failure()
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: logs-${{ matrix.os }}-${{ matrix.test.name }}
+          path: |
+            ${{ github.workspace }}/artifacts/log/*/*.binlog
+            ${{ github.workspace }}/artifacts/log/*/TestLogs/**
+          retention-days: 5

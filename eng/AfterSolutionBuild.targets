@@ -1,0 +1,41 @@
+<Project>
+
+  <Target Name="_GenerateTestMatrix" BeforeTargets="Test" Condition=" '$(TestRunnerName)' == 'TestRunsheetBuilder' ">
+    <!-- Define the output file path -->
+    <PropertyGroup>
+      <_CombinedRunsheetFile>$(ArtifactsTmpDir)\combined_runsheet.json</_CombinedRunsheetFile>
+      <_Command>
+        $combined = @()
+        Get-ChildItem -Path '$(ArtifactsTmpDir)' -Filter '*.runsheet.json' |
+            ForEach-Object {
+                $content = Get-Content -Raw $_.FullName | ConvertFrom-Json
+                if ($content -is [Array]) {
+                    $combined += $content
+                }
+                else {
+                    $combined += @($content)
+                }
+            }
+        $jsonString = ($combined | ConvertTo-Json -Depth 10 -Compress)
+        $jsonString | Set-Content '$(_CombinedRunsheetFile)';
+
+        # determine if the script is running in a GitHub Actions environment
+        if ($env:CI -and $env:GITHUB_ACTIONS) {
+            "integrations_tests_matrix=$jsonString" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+        }
+        else {
+            Write-Host "integrations_tests_matrix=$jsonString"
+        }
+      </_Command>
+      <_Script>$([MSBuild]::NormalizePath($(ArtifactsTmpDir), 'create-runsheet.ps1'))</_Script>
+    </PropertyGroup>
+
+    <WriteLinesToFile File="$(_Script)"
+                      Lines="$(_Command)"
+                      Overwrite="true" />
+    <Exec Command="pwsh -File $(_Script)" ConsoleToMSBuild="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="ScriptOutput" />
+    </Exec>
+    <Message Importance="high" Text="Combined runsheet created%0D%0A%0D%0A$(ScriptOutput)" />
+  </Target>
+</Project>
