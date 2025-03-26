@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Threading.Channels;
+using Aspire.Components.Common.Tests;
 using Aspire.Hosting.Health;
 using Aspire.Hosting.Utils;
 using Microsoft.AspNetCore.InternalTesting;
@@ -137,7 +138,7 @@ public class ResourceHealthCheckServiceTests(ITestOutputHelper testOutputHelper)
     }
 
     [Fact]
-    [ActiveIssue("https://github.com/dotnet/aspire/issues/8103")]
+    [QuarantinedTest("https://github.com/dotnet/aspire/issues/8103")]
     public async Task ResourcesWithHealthCheck_StopsAndRestartsMonitoringWithResource()
     {
         using var builder = TestDistributedApplicationBuilder.Create(testOutputHelper);
