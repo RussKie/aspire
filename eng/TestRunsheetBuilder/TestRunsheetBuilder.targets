@@ -5,6 +5,8 @@
 
          .\build.cmd -test /p:TestRunnerName=TestRunsheetBuilder /bl
 
+        Locally add: /p:IsGitHubActionsRunner=true
+
     For the large part this is a copy of the Arcade SDK's implementations:
       - https://github.com/dotnet/arcade/blob/b888df17/src/Microsoft.DotNet.Arcade.Sdk/tools/XUnit/XUnit.Runner.targets
       - https://github.com/dotnet/arcade/blob/b888df17/src/Microsoft.DotNet.Arcade.Sdk/tools/VSTest.targets
@@ -12,7 +14,7 @@
 
   <Target Name="RunTests"
           Outputs="%(TestToRun.ResultsStdOutPath)"
-          Condition=" '$(SkipTests)' != 'true' and '$(RunTestsOnGithubActions)' == 'true' ">
+          Condition=" '$(SkipTests)' != 'true' and '$(SupportsGithubActions)' == 'true' ">
 
     <PropertyGroup>
       <_TestRunsheet>$([System.IO.Path]::GetFileNameWithoutExtension('%(TestToRun.ResultsHtmlPath)'))</_TestRunsheet>

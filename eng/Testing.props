@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+    <!-- By default any test can run on all test platforms -->
+    <SupportsGithubActionsWindows>true</SupportsGithubActionsWindows>
+    <SupportsGithubActionsLinux>true</SupportsGithubActionsLinux>
+    <SupportsAzdo>true</SupportsAzdo>
+    <SupportsHelixWindows>true</SupportsHelixWindows>
+    <SupportsHelixLinux>true</SupportsHelixLinux>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(UseVSTestRunner)' != 'true'">
+    <_QuarantinedTestRunAdditionalArgs>-trait "Quarantined=true"</_QuarantinedTestRunAdditionalArgs>
+    <_NonQuarantinedTestRunAdditionalArgs>-notrait "Quarantined=true"</_NonQuarantinedTestRunAdditionalArgs>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(UseVSTestRunner)' == 'true'">
+    <_QuarantinedTestRunAdditionalArgs>--filter Quarantined=true</_QuarantinedTestRunAdditionalArgs>
+    <_NonQuarantinedTestRunAdditionalArgs>--filter Quarantined!=true</_NonQuarantinedTestRunAdditionalArgs>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TestRunnerAdditionalArguments Condition="'$(RunQuarantinedTests)' == ''">$(TestRunnerAdditionalArguments) $(_NonQuarantinedTestRunAdditionalArgs) $(TestRunnerAdditionalArguments)</TestRunnerAdditionalArguments>
+    <TestRunnerAdditionalArguments Condition="'$(RunQuarantinedTests)' == 'true'">$(TestRunnerAdditionalArguments) $(_QuarantinedTestRunAdditionalArgs) $(TestRunnerAdditionalArguments)</TestRunnerAdditionalArguments>
+  </PropertyGroup>
+</Project>
