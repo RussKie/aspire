@@ -32,7 +32,7 @@ jobs:
         id: generate_tests_matrix
         shell: pwsh
         run: |
-          ./build.cmd -test /p:TestRunnerName=TestRunsheetBuilder /bl -c Release
+          ./build.cmd -test /p:TestRunnerName=TestRunsheetBuilder -bl -c Release
 
       - name: Upload logs, and test results
         if: ${{ always() }}
