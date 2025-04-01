@@ -30,12 +30,20 @@
       <!-- Replace \ with /, and then escape " with \", so we have a compliant JSON -->
       <_TestCommand>$([System.String]::Copy($(_TestCommand)).Replace("\", "/").Replace('&quot;', '\&quot;'))</_TestCommand>
 
-      <_TestRunsheetJson>{ "name": "$(MSBuildProjectName)", "command": "$(_TestCommand)", "runnerWindows": "$(_TestRunnerWindows)", "runnerLinux": "$(_TestRunnerLinux)" }</_TestRunsheetJson>
+      <_TestRunsheetWindows>{ "os": "windows-latest", "project": "$(MSBuildProjectName)", "command": "./eng/build.ps1 $(_TestCommand)" }</_TestRunsheetWindows>
+      <_TestRunsheetLinux>{ "os": "ubuntu-latest", "project": "$(MSBuildProjectName)", "command": "./eng/build.sh $(_TestCommand)" }</_TestRunsheetLinux>
     </PropertyGroup>
 
     <WriteLinesToFile
-            File="$(ArtifactsTmpDir)\$(_TestRunsheet).runsheet.json"
-            Lines="$(_TestRunsheetJson)"
+            Condition=" '$(SupportsGithubActionsWindows)' == 'true' "
+            File="$(ArtifactsTmpDir)\$(_TestRunsheet).win.runsheet.json"
+            Lines="$(_TestRunsheetWindows)"
+            Overwrite="true"
+            WriteOnlyWhenDifferent="true" />
+    <WriteLinesToFile
+            Condition=" '$(SupportsGithubActionsLinux)' == 'true' "
+            File="$(ArtifactsTmpDir)\$(_TestRunsheet).linux.runsheet.json"
+            Lines="$(_TestRunsheetLinux)"
             Overwrite="true"
             WriteOnlyWhenDifferent="true" />
   </Target>
