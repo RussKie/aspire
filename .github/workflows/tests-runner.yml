@@ -34,6 +34,17 @@ jobs:
         run: |
           ./build.cmd -test /p:TestRunnerName=TestRunsheetBuilder /bl -c Release
 
+      - name: Upload logs, and test results
+        if: failure()
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: logs-runsheet
+          path: |
+            ${{ github.workspace }}/artifacts/log/*/*.binlog
+            ${{ github.workspace }}/artifacts/log/*/TestLogs/**
+            ${{ github.workspace }}/artifacts/tmp/*/combined_runsheet.json
+          retention-days: 5
+
   run_tests:
     name: Run tests
     needs: generate_tests_matrix
