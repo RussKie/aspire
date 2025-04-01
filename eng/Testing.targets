@@ -18,15 +18,12 @@
     -->
   <PropertyGroup>
     <!-- See https://docs.github.com/actions/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables#default-environment-variables -->
-    <IsGitHubActionsRunner>false</IsGitHubActionsRunner>
     <IsGitHubActionsRunner Condition=" '$(IsGitHubActionsRunner)' == '' and '$(GITHUB_ACTIONS)' == 'true' ">true</IsGitHubActionsRunner>
 
     <!-- See https://learn.microsoft.com/azure/devops/pipelines/build/variables#system-variables -->
-    <IsAzdoRunner>false</IsAzdoRunner>
-    <IsAzdoRunner Condition=" '$(IsAzdoRunner)' == '' and '$(TF_BUILD)' == 'true' ">true</IsAzdoRunner>
+    <IsAzdoRunner Condition=" '$(IsAzdoRunner)' == '' and '$(SYSTEM_HOSTTYPE )' == 'build' ">true</IsAzdoRunner>
 
     <!-- See https://github.com/dotnet/arcade/blob/main/src/Microsoft.DotNet.Helix/Sdk/Readme.md#common-helix-client-environment-variables -->
-    <IsHelix>false</IsHelix>
     <IsHelix Condition=" '$(IsHelix)' == '' and '$(HELIX_CORRELATION_ID)' != '' ">true</IsHelix>
   </PropertyGroup>
 
