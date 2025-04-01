@@ -21,6 +21,14 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Env
+        shell: pwsh
+        run: |
+          Write-Host "Listing all environment variables..."
+          Get-ChildItem -Path Env: | ForEach-Object {
+              Write-Host "$($_.Name) = $($_.Value)"
+          }
+
       - name: Install toolsets
         shell: pwsh
         run: |
