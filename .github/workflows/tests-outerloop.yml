@@ -15,7 +15,6 @@ jobs:
   generate_tests_matrix:
     name: Generate test runsheet
     runs-on: windows-latest
-    if: ${{ github.repository_owner == 'dotnet' }}
     outputs:
       runsheet: ${{ steps.generate_tests_matrix.outputs.runsheet }}
     steps:
@@ -52,7 +51,6 @@ jobs:
         tests: ${{ fromJson(needs.generate_tests_matrix.outputs.runsheet) }}
 
     runs-on: ${{ matrix.tests.os }} # Use the OS from the matrix
-    if: ${{ github.repository_owner == 'dotnet' }}
 
     steps:
       - name: Trust HTTPS development certificate
@@ -104,7 +102,6 @@ jobs:
           path: ${{ github.workspace }}/artifacts/all-logs
 
       - name: Process logs and post results
-        if: ${{ always() && github.repository_owner == 'dotnet' }}
         shell: pwsh
         run: |
           $logDirectory = "${{ github.workspace }}/artifacts/all-logs"
