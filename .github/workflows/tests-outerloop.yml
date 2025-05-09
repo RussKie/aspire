@@ -86,6 +86,7 @@ jobs:
           path: |
             ${{ github.workspace }}/artifacts/log/*/TestLogs/**/*.log
             ${{ github.workspace }}/artifacts/TestResults/*/*.trx
+            ${{ github.workspace }}/artifacts/TestResults/*/*_crash.dmp
           # Longer retention time to allow scanning runs for quarantined test results
           retention-days: 30
 

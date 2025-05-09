@@ -126,7 +126,6 @@
       <_TestRunsheet>$([System.String]::Copy('$(MSBuildProjectName)').Replace('Aspire.', ''))</_TestRunsheet>
       <_TestRunsheetFileNameWindows>$(ArtifactsTmpDir)/$(_TestRunsheet).win.runsheet.json</_TestRunsheetFileNameWindows>
       <_TestRunsheetFileNameLinux>$(ArtifactsTmpDir)/$(_TestRunsheet).linux.runsheet.json</_TestRunsheetFileNameLinux>
-      <_TestRunsheetFileNameMacOS>$(ArtifactsTmpDir)/$(_TestRunsheet).macos.runsheet.json</_TestRunsheetFileNameMacOS>
 
       <_TestBinLog>$([MSBuild]::NormalizePath($(ArtifactsLogDir), '$(_TestRunsheet).binlog'))</_TestBinLog>
 
