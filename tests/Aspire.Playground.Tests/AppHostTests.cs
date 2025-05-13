@@ -320,13 +320,13 @@ public class AppHostTests
 
                 // Disabled due to https://github.com/dotnet/aspire/issues/9274
                 // Invoke "/" first to create the databases
-                new TestEndpoints(typeof(Projects.SqlServerEndToEnd_AppHost),
-                    resourceEndpoints: new() { { "api", ["/", "/alive", "/health"] } },
-                    enableParameterRandomisation: false,
-                    waitForTexts: [
-                        new ("sql1", "SQL Server is now ready for client connections"),
-                        new ("sql2", "SQL Server is now ready for client connections"),
-                    ]),
+                //new TestEndpoints(typeof(Projects.SqlServerEndToEnd_AppHost),
+                //    resourceEndpoints: new() { { "api", ["/", "/alive", "/health"] } },
+                //    enableParameterRandomisation: false,
+                //    waitForTexts: [
+                //        new ("sql1", "SQL Server is now ready for client connections"),
+                //        new ("sql2", "SQL Server is now ready for client connections"),
+                //    ]),
             ];
 
             return candidates;
