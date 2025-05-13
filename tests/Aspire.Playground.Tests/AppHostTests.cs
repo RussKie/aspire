@@ -17,6 +17,7 @@ using Xunit.Sdk;
 
 namespace Aspire.Playground.Tests;
 
+[Collection("AppHostTests")]
 [RequiresDocker]
 public class AppHostTests
 {
